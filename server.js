@@ -79,43 +79,6 @@ app.post('/login', async (req, res) => {
   } catch (error) {
     res.status(500).send(`Error logging in: ${error}`);
   }
-
-
-
-  // db.query(query, [email], async (err, results) => {
-  //   if (err) throw err;
-
-  //   if (results.length > 0) {
-  //     const user = results[0];
-
-  //     // Compare the hashed password
-  //     const isMatch = await bcrypt.compare(password, user.password);
-
-  //     if (isMatch) {
-  //       //res.status(200).send('Login successful');
-
-  //       //Create session data
-  //       req.session.user = {
-  //         id: user._user_id,
-  //         role: user.role,
-  //         name: user.name,
-  //         email: user.email
-  //       };
-
-  //       // Redirect based on privilage/role
-  //       if (user.role === 'user') {
-  //         res.redirect('user_dashboard.html');
-  //       } else if (user.role === 'admin') {
-  //         res.redirect('admin_dashboard.html');
-  //       }
-
-  //     } else {
-  //       res.status(401).send('Invalid credentials');
-  //     }
-  //   } else {
-  //     res.status(404).send('User not found');
-  //   }
-  // });
 });
 
 // User logout
