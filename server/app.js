@@ -9,6 +9,7 @@ const router = express.Router();
 // All SQL queries should go through here, e.g. 
 // Models.User.create(...), Models.User.findOne(...), etc.
 const Models = require('./db/models');
+const query = require('./db/queries');
 
 
 const app = express();
@@ -40,7 +41,7 @@ app.post("/register", async (req, res) => {
     // should probably have more validation here
 
     // Insert the new user into the database
-    const newUser = await Models.User.create(req.body);
+    await query.INSERT.createUser(req.body);
     res.redirect("/index.html");
   } catch (error) {
     res.status(500).send(`Error registering user: ${error}`);
@@ -53,7 +54,7 @@ app.post('/login', async (req, res) => {
 
   try {
     // Find the user by email
-    const user = await Models.User.findOne({ where: { email: email } });
+    const user = await query.SELECT.getUserByEmail(email);
     if (!user) {
       return res.status(404).send('User not found');
     }
