@@ -58,8 +58,6 @@ app.post('/login', async (req, res) => {
     if (!user) {
       return res.status(404).send('User not found');
     }
-
-
     // Compare the hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
@@ -71,9 +69,9 @@ app.post('/login', async (req, res) => {
       };
       // Redirect based on privilage/role
       if (user.role === 'student') {
-        res.redirect('student_dashboard.html');
+        res.redirect('/demo/index.html');
       } else if (user.role === 'admin') {
-        res.redirect('admin_dashboard.html');
+        res.redirect('/demo/index.html');
       }
     }
     else {
@@ -92,6 +90,24 @@ app.post('/logout', (req, res) => {
     }
     res.redirect("/");
   });
+});
+
+app.get('/api/posts', async (req, res) => {
+	try {
+		const page = parseInt(req.query.page) || 1;
+		const perpage = 20;
+
+		const offset = (page - 1) * perpage;
+		const { count, rows } = await query.SELECT.getAllPostsPage(perpage, offset);
+		res.json({
+			posts: rows,
+			totalPosts: count,
+			totalPages: Math.ceil(count / perpage),
+			currentPage: page,
+		})
+	} catch (error) {
+		res.status(500).send(`Error retrieving posts: ${error}`);
+	}
 });
 
 module.exports = app;

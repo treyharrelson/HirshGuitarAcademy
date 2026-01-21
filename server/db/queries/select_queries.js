@@ -9,6 +9,28 @@ async function getUserByEmail(email) {
 	}
 }
 
+async function getAllPosts() {
+	try {
+		return await Models.Post.findAll();
+	} catch (error) {
+		throw error;
+	}
+}
+
+async function getAllPostsPage(limit, offset) {
+	try {
+		return await Models.Post.findAndCountAll({
+			limit: limit,
+			offset: offset,
+			order: [['datePosted', 'DESC']],
+		});
+	} catch (error) {
+		throw error;
+	}
+}
+
 module.exports = {
 	getUserByEmail,
+	getAllPosts,
+	getAllPostsPage,
 };
