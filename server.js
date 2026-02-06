@@ -21,6 +21,7 @@ const port = 3000;
 
 // Collect data sent from client
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json()); // get JSON data sent from React with axios
 
 // Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -36,6 +37,8 @@ app.use(session({
 
 // Register a new user
 app.post("/register", async (req, res) => {
+  console.log('Register request received');
+  console.log('Request body:', req.body);
   try {
     // Hash the password
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -64,6 +67,7 @@ app.post('/login', async (req, res) => {
     
 
     // Compare the hashed password
+  
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
       req.session.user = {

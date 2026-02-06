@@ -1,4 +1,4 @@
-import { useState, type SubmitEventHandler } from 'react';
+import { useState, type SubmitEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -45,7 +45,7 @@ function Login() {
                     type="email"
                     placeholder="Email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)} // update state on every keystroke
                     required
                 />
                 <input
@@ -58,6 +58,11 @@ function Login() {
                 <button type="submit">Login</button>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
             </form>
+            <p>
+                Don't have an account? <a href="/register">Register</a>
+            </p>
         </div>
     )
 }
+
+export default Login;

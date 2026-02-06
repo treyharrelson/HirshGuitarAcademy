@@ -23,6 +23,7 @@ Daily Development:
     need to run two terminals simultaneously for frontend and backend
     
     1. backend
+        docker compose up -d (-d runs in background (detached))
         npm run devStart (runs on http://localhost:3000)
     2. frontend
         cd client
