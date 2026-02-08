@@ -3,20 +3,22 @@ const bcrypt = require("bcrypt");
 const session = require("express-session");
 const cors = require('cors');
 const router = express.Router();
+// SQL Models for sequelize
+// All SQL queries should go through here, e.g. 
+// Models.User.create(...), Models.User.findOne(...), etc.
+const Models = require('./models');
+const path = require('path');
 const app = express();
 
+// -- MIDDLEWARE SETUP --
+
+// allows connection from frontend
 app.use(cors({
   origin: 'http://localhost:5173', //Vite dev server
   credentials: true
 }));
 
-// SQL Models for sequelize
-// All SQL queries should go through here, e.g. 
-// Models.User.create(...), Models.User.findOne(...), etc.
-const Models = require('./models');
-
-const path = require('path');
-
+// what port the server listens on
 const port = 3000;
 
 // Collect data sent from client
@@ -34,6 +36,23 @@ app.use(session({
   saveUninitialized: false, // prevents a asession from being saved if it hasnt been modified
   cookie: { maxAge: 1000 * 60 * 60 * 24 } // cookie expiration time
 }))
+
+// -- ROUTES --
+
+// Check if user is logged in (read from session)
+app.get('/api/me', (req, res) => {
+  if (req.session.user) {
+    res.json({
+      success: true,
+      user: req.session.user
+    });
+  } else {
+    res.status(401).json({
+      success: false,
+      message: 'Not authenticated'
+    });
+  }
+});
 
 // Register a new user
 app.post("/register", async (req, res) => {
@@ -142,6 +161,8 @@ app.post('/logout', (req, res) => {
   });
 });
 
+
+// -- START SERVER --
 module.exports = router;
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);

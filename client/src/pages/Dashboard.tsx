@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function Dashboard() {
-    const { user, logout } = useAuth();
+    const { user, logout, loading } = useAuth();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
@@ -18,8 +18,14 @@ function Dashboard() {
         }
     };
 
-    if (!user) {
+    // show loading while checking auth
+    if (loading) {
         return <div>Loading...</div>;
+    }
+    // if not logged in after loading, redirect to login
+    if (!user) {
+        navigate('/');
+        return null;
     }
 
     return (
